@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storefront Catalog — Websites Built to Sell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* soft mint → sage → slate → indigo palette */
+    --mint:#E4F1D8;
+    --mint-deep:#CDE6BC;
+    --sage:#A9C49E;
+    --sage-deep:#7FA073;
+    --slate:#7C8C90;
+    --slate-blue:#5C5D80;
+    --indigo:#241D52;
+    --indigo-deep:#1A1540;
+
+    --paper:#F1F6EA;
+    --paper-card:#DCEACE;
+    --ink:var(--indigo);
+    --ink-soft:#5C5D80;
+    --line: rgba(36,29,82,0.14);
+    --line-soft: rgba(36,29,82,0.08);
+
+    --display: 'Fraunces', serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+
+    --r-sm:10px;
+    --r-md:16px;
+    --r-lg:26px;
+    --r-pill:999px;
+  }
+
+  *{margin:0; padding:0; box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+  a{color:inherit;}
+  button{font:inherit;}
+  :focus-visible{outline:3px solid var(--sage-deep); outline-offset:2px; border-radius:6px;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:radial-gradient(circle at 12% 8%, rgba(169,196,158,0.35), transparent 45%),
+               radial-gradient(circle at 88% 92%, rgba(92,93,128,0.18), transparent 40%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{ position:sticky; top:0; z-index:50; background:rgba(241,246,234,0.9); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px; margin:0 auto; }
+  .brand{ font-family:var(--display); font-weight:600; font-size:22px; display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:14px; height:14px; background:var(--sage-deep); border-radius:50%; display:inline-block; }
+  .nav-links{ display:flex; gap:28px; font-family:var(--mono); font-size:12.5px; letter-spacing:0.03em; text-transform:uppercase; color:var(--ink-soft); }
+  .nav-links a{ text-decoration:none; border-bottom:1px solid transparent; padding-bottom:3px; transition:border-color .2s, color .2s;}
+  .nav-links a:hover{ border-color:var(--ink-soft); color:var(--ink); }
+  .nav-cta{ font-family:var(--mono); font-size:12px; text-transform:uppercase; background:var(--indigo); color:var(--mint); padding:11px 20px; text-decoration:none; letter-spacing:0.04em; white-space:nowrap; border-radius:var(--r-pill); box-shadow:0 6px 16px rgba(36,29,82,0.25); }
+  .nav-cta:hover{ background:var(--indigo-deep); }
+  @media (max-width:760px){ .nav-links{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; padding:96px 0 80px; overflow:hidden; }
+  .hero-inner{ display:grid; grid-template-columns:1.3fr 0.7fr; gap:56px; align-items:end; }
+  .eyebrow{ font-family:var(--mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--sage-deep); display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+  .eyebrow::before{ content:""; width:26px; height:2px; background:var(--sage-deep); border-radius:2px; }
+  h1.hero-title{ font-family:var(--display); font-weight:600; font-size:clamp(42px, 6.4vw, 84px); line-height:1.02; letter-spacing:-0.01em; }
+  h1.hero-title em{ font-style:italic; color:var(--indigo); }
+  .hero-sub{ margin-top:26px; font-size:18px; max-width:46ch; color:var(--ink-soft); }
+  .hero-actions{ margin-top:34px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary, .btn-secondary{
+    font-family:var(--mono); font-size:13px; text-transform:uppercase; letter-spacing:0.03em;
+    padding:15px 26px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    cursor:pointer; border-radius:var(--r-pill); border:1px solid transparent;
+  }
+  .btn-primary{ background:var(--indigo); color:var(--mint); box-shadow:0 10px 24px rgba(36,29,82,0.28); }
+  .btn-primary:hover{ background:var(--indigo-deep); transform:translateY(-1px); }
+  .btn-secondary{ background:transparent; border:1px solid var(--ink-soft); color:var(--ink); }
+  .btn-secondary:hover{ background:var(--paper-card); }
+
+  .sign-wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .sign-chain{ width:2px; height:26px; background:repeating-linear-gradient(180deg, var(--ink-soft) 0 4px, transparent 4px 8px); }
+  .sign{
+    width:172px; height:172px; border-radius:var(--r-lg);
+    background:linear-gradient(160deg, var(--slate-blue), var(--indigo));
+    display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer;
+    box-shadow:0 16px 34px rgba(36,29,82,0.28);
+    transition:box-shadow .35s ease, background .35s ease;
+  }
+  .sign-face{ font-family:var(--display); font-weight:600; font-size:26px; letter-spacing:1px; transition:opacity .35s ease; }
+  .sign-face.closed{ color:rgba(228,241,216,0.55); }
+  .sign-face.open{ color:var(--mint); position:absolute; opacity:0; }
+  .sign.is-open .sign-face.closed{ opacity:0; }
+  .sign.is-open .sign-face.open{ opacity:1; }
+  .sign.is-open{ background:linear-gradient(160deg, var(--sage-deep), #4B6146); box-shadow:0 0 0 6px rgba(169,196,158,0.25), 0 16px 34px rgba(79,107,70,0.35); }
+  .sign-hint{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.06em; }
+  @media (max-width:900px){ .hero-inner{ grid-template-columns:1fr; } .sign-wrap{ align-items:flex-start; } }
+
+  /* ---------- STRIP ---------- */
+  .strip{ background:var(--indigo); color:var(--mint); padding:22px 0; }
+  .strip-inner{ display:flex; gap:40px; flex-wrap:wrap; font-family:var(--mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.04em; color:#C9CEE8; }
+  .strip-inner strong{ color:var(--mint); font-weight:600; }
+
+  /* ---------- CATALOG INTRO ---------- */
+  .cat-intro{ padding:76px 0 34px; }
+  .cat-intro h2{ font-family:var(--display); font-weight:600; font-size:clamp(28px,3.6vw,40px); max-width:20ch; }
+  .cat-intro p{ margin-top:16px; max-width:60ch; color:var(--ink-soft); font-size:16px; }
+
+  /* ---------- CATALOG GRID ---------- */
+  .catalog{ padding:10px 0 100px; display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:920px){ .catalog{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:620px){ .catalog{ grid-template-columns:1fr; } }
+
+  .shelf{
+    position:relative;
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:var(--r-md);
+    padding:28px 26px 26px;
+    text-align:left;
+    cursor:pointer;
+    display:flex; flex-direction:column; gap:14px;
+    opacity:0; transform:translateY(16px);
+    transition:opacity .5s ease, transform .5s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .shelf.in-view{ opacity:1; transform:translateY(0); }
+  .shelf:hover{ box-shadow:0 18px 34px rgba(36,29,82,0.16); transform:translateY(-4px); border-color:var(--sage-deep); }
+  .shelf-num{ font-family:var(--mono); font-size:11.5px; text-transform:uppercase; color:var(--sage-deep); letter-spacing:0.06em; }
+  .shelf-title{ font-family:var(--display); font-weight:600; font-size:25px; line-height:1.08; }
+  .shelf-line{ font-size:14px; color:var(--ink-soft); }
+  .shelf-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:2px;}
+  .chip{ font-family:var(--mono); font-size:10.5px; border:1px solid var(--line); border-radius:var(--r-pill); padding:4px 10px; background:var(--paper); color:var(--ink-soft); }
+  .shelf-points{
+    list-style:none;
+    display:flex; flex-direction:column; gap:7px;
+    padding:14px 0 4px;
+    border-top:1px dashed var(--line);
+    margin-top:2px;
+  }
+  .shelf-points li{
+    font-size:13px;
+    line-height:1.4;
+    color:var(--ink);
+    display:flex; gap:8px; align-items:flex-start;
+  }
+  .shelf-points li::before{
+    content:"✓";
+    color:var(--sage-deep);
+    font-weight:700;
+    font-size:12px;
+    flex-shrink:0;
+    margin-top:1px;
+  }
+  .shelf-btn{
+    margin-top:auto;
+    display:inline-flex; align-items:center; justify-content:space-between;
+    font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.04em;
+    background:var(--indigo); color:var(--mint); border-radius:var(--r-pill);
+    padding:11px 16px;
+  }
+  .shelf:hover .shelf-btn{ background:var(--sage-deep); color:#fff; }
+
+  /* ---------- MODAL / BROWSER POPUP ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(26,21,64,0.55); backdrop-filter:blur(3px);
+    display:none; align-items:center; justify-content:center;
+    padding:26px; z-index:200;
+  }
+  .overlay.open{ display:flex; }
+  .browser{
+    width:100%; max-width:980px; max-height:88vh;
+    background:#fff;
+    border-radius:var(--r-lg);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    box-shadow:0 30px 70px rgba(26,21,64,0.45);
+    transform:scale(.96); opacity:0;
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .overlay.open .browser{ transform:scale(1); opacity:1; }
+  .browser-chrome{
+    background:var(--paper-card); border-bottom:1px solid var(--line);
+    padding:12px 16px; display:flex; align-items:center; gap:12px; flex-shrink:0;
+  }
+  .dots{ display:flex; gap:6px; }
+  .dots span{ width:11px; height:11px; border-radius:50%; display:inline-block; }
+  .dots span:nth-child(1){ background:#E7A1A1; }
+  .dots span:nth-child(2){ background:#E6C97A; }
+  .dots span:nth-child(3){ background:var(--sage-deep); }
+  .url-bar{
+    flex:1; background:#fff; border:1px solid var(--line); padding:7px 14px; border-radius:var(--r-pill);
+    font-family:var(--mono); font-size:12px; color:var(--ink-soft);
+    display:flex; align-items:center; gap:8px;
+  }
+  .url-bar .lock{ color:var(--sage-deep); font-size:11px; }
+  .close-btn{
+    background:var(--indigo); color:var(--mint); border:none; width:30px; height:30px; border-radius:50%;
+    font-family:var(--mono); cursor:pointer; flex-shrink:0;
+  }
+  .close-btn:hover{ background:var(--indigo-deep); }
+  .browser-body{ overflow-y:auto; }
+
+  /* ===== MOCKUP SHARED HELPERS ===== */
+  .mk{ font-family:var(--body); color:#241D52; }
+  .mk-btn{ display:inline-block; font-family:var(--body); font-weight:700; padding:12px 22px; text-decoration:none; border-radius:var(--r-pill); }
+
+  /* Image slots: point these at files in an /images folder placed next to
+     this HTML file. Name your files exactly as shown in each mockup's
+     data-file comment. If a file is missing, onerror below swaps in a
+     soft placeholder so the layout never breaks. */
+  .mk-img{
+    display:block; width:100%; height:100%; object-fit:cover;
+  }
+  .mk-img-placeholder{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%;
+    background:linear-gradient(135deg,#E4EEDA,#CDE6BC);
+    color:#5C5D80; text-align:center;
+    font-family:var(--mono); font-size:10px; line-height:1.4;
+    padding:8px;
+  }
+  .mk-img-round, .mk-img-round.mk-img-placeholder{ border-radius:50%; }
+
+  /* Containers that hold a photo: make them the positioning context so the
+     <img> (or its fallback placeholder) can fill the box exactly. */
+  .mk-lp .products .ph,
+  .pcard .img,
+  .barbers .circ,
+  .ba-item .pair div{
+    position:relative;
+    overflow:hidden;
+  }
+  .mk-lp .products .ph img, .mk-lp .products .ph .mk-img-placeholder,
+  .pcard .img img, .pcard .img .mk-img-placeholder,
+  .barbers .circ img, .barbers .circ .mk-img-placeholder,
+  .ba-item .pair div img, .ba-item .pair div .mk-img-placeholder{
+    position:absolute; inset:0;
+  }
+
+  /* Mockup 1: Landing page */
+  .mk-lp{ background:#EDE4D3; color:#4A3728; padding:54px 40px; text-align:center; }
+  .mk-lp .mk-eyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:#8B5E3C; text-transform:uppercase; margin-bottom:14px;}
+  .mk-lp h3{ font-size:36px; font-weight:800; line-height:1.08; margin-bottom:14px; color:#3D2B1F; }
+  .mk-lp p{ color:#6B5645; max-width:44ch; margin:0 auto 26px; }
+  .mk-lp .countdown{ display:flex; gap:10px; justify-content:center; margin-bottom:26px; }
+  .mk-lp .countdown div{ background:#E0D3B8; border:1px solid #C7B491; padding:10px 14px; border-radius:var(--r-sm); font-family:var(--mono); font-size:20px; min-width:56px; color:#3D2B1F; }
+  .mk-lp .countdown span{ display:block; font-size:9px; color:#8B7355; margin-top:4px; text-transform:uppercase; }
+  .mk-lp .mk-btn{ background:#8B5E3C; color:#F5EEE1; }
+  .mk-lp .products{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:40px; text-align:left;}
+  .mk-lp .products .p{ background:#E0D3B8; border:1px solid #C7B491; border-radius:var(--r-sm); padding:10px; font-size:11px; color:#3D2B1F;}
+  .mk-lp .products .ph{ aspect-ratio:1/1; width:100%; border-radius:8px; background:linear-gradient(135deg,#C7B491,#AE9270); margin-bottom:8px; overflow:hidden;}
+
+  /* Mockup 2: Service / lead capture */
+  .mk-sv-nav{ display:flex; justify-content:space-between; align-items:center; padding:16px 34px; border-bottom:1px solid #EAE7F5;}
+  .mk-sv-nav .logo{ font-weight:800; font-size:16px;}
+  .mk-sv-nav .links{ display:flex; gap:20px; font-size:12.5px; color:#7B7A9C;}
+  .mk-sv-hero{ background:#3B5C40; color:#fff; padding:50px 34px; display:flex; gap:36px; align-items:center; }
+  .mk-sv-hero .col{ flex:1; }
+  .mk-sv-hero h3{ font-size:28px; font-weight:800; line-height:1.15; margin-bottom:12px;}
+  .mk-sv-hero p{ color:#D4E4CC; margin-bottom:20px; max-width:36ch;}
+  .mk-sv-hero .mk-btn{ background:#E4F1D8; color:#20262B;}
+  .mk-sv-hero .badges{ display:flex; gap:10px; margin-top:20px; font-size:11px; color:#D4E4CC; font-family:var(--mono);}
+  .quote-card{ background:#fff; border:1px solid #E4E1F0; border-radius:var(--r-md); padding:22px; width:280px; flex-shrink:0; color:#241D52; box-shadow:0 14px 30px rgba(0,0,0,0.15);}
+  .quote-card h4{ font-size:14px; margin-bottom:12px;}
+  .quote-card input, .quote-card textarea{ width:100%; padding:10px; margin-bottom:9px; border:1px solid #DCD9EA; border-radius:8px; font-size:12px; font-family:var(--body);}
+  .quote-card .mk-btn{ width:100%; text-align:center; background:#3B5C40; color:#fff; border:none; cursor:pointer;}
+  .mk-sv-services{ padding:40px 34px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .mk-sv-services .svc{ border:1px solid #EAE7F5; border-radius:var(--r-md); padding:20px;}
+  .mk-sv-services .svc .ic{ width:34px; height:34px; border-radius:10px; background:#3B5C40; margin-bottom:12px;}
+  .mk-sv-services h5{ font-size:14px; margin-bottom:6px;}
+  .mk-sv-services p{ font-size:12px; color:#7B7A9C;}
+
+  /* Mockup 3: Online catalog */
+  .mk-ec-top{ padding:20px 34px; border-bottom:1px solid #EFEFEF; display:flex; justify-content:space-between; align-items:center;}
+  .mk-ec-top .logo{ font-weight:800;}
+  .filters{ display:flex; gap:8px; padding:16px 34px; flex-wrap:wrap;}
+  .filters span{ font-size:11.5px; font-family:var(--mono); border:1px solid #DCD9EA; border-radius:var(--r-pill); padding:6px 14px; }
+  .filters span.active{ background:#241D52; color:#fff; border-color:#241D52;}
+  .grid-products{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding:10px 34px 34px;}
+  .pcard{ border:1px solid #EFEFEF; border-radius:var(--r-md); overflow:hidden;}
+  .pcard .img{ height:90px; background:linear-gradient(135deg,#E4EEDA,#CDE6BC);}
+  .pcard .info{ padding:12px;}
+  .pcard .info .name{ font-size:12.5px; font-weight:600; margin-bottom:4px;}
+  .pcard .info .price{ font-size:13px; color:#5C5D80; font-weight:700;}
+  .pcard .stock{ font-size:9.5px; font-family:var(--mono); color:#4B6146; text-transform:uppercase; margin-top:4px;}
+
+  /* Mockup 4: Booking */
+  .mk-bk-hero{ padding:30px 34px; border-bottom:1px solid #EFEFEF;}
+  .mk-bk-hero h3{ font-size:22px; font-weight:800;}
+  .mk-bk-hero p{ color:#7B7A9C; font-size:13px; margin-top:4px;}
+  .svc-menu{ display:flex; gap:10px; padding:20px 34px; flex-wrap:wrap;}
+  .svc-menu .item{ border:1px solid #DCD9EA; border-radius:var(--r-pill); padding:10px 18px; font-size:12.5px; }
+  .svc-menu .item.sel{ border-color:#241D52; background:#241D52; color:#fff;}
+  .barbers{ display:flex; gap:14px; padding:0 34px 20px;}
+  .barbers .av{ text-align:center; font-size:11px;}
+  .barbers .circ{ width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#A9C49E,#4B6146); margin:0 auto 6px;}
+  .times{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding:0 34px 20px;}
+  .times div{ border:1px solid #DCD9EA; border-radius:var(--r-sm); padding:9px; text-align:center; font-size:12px; font-family:var(--mono);}
+  .times div.sel{ background:#4B6146; color:#fff; border-color:#4B6146;}
+  .book-footer{ padding:20px 34px; border-top:1px solid #EFEFEF; display:flex; justify-content:space-between; align-items:center;}
+  .book-footer .mk-btn{ background:#4B6146; color:#fff;}
+
+  /* Mockup 5: Portfolio */
+  .mk-pf-hero{ padding:34px; }
+  .mk-pf-hero h3{ font-size:26px; font-weight:800;}
+  .mk-pf-hero p{ color:#7B7A9C; font-size:13px; margin-top:6px; max-width:50ch;}
+  .ba-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; padding:0 34px 34px;}
+  .ba-item .pair{ display:flex; height:100px; border-radius:var(--r-md); overflow:hidden; }
+  .ba-item .pair div{ flex:1; position:relative; }
+  .ba-item .pair div:first-child{ background:linear-gradient(135deg,#D9D6E8,#B9B6D2); }
+  .ba-item .pair div:last-child{ background:linear-gradient(135deg,#E4EEDA,#A9C49E); }
+  .ba-item .pair div::after{ content:attr(data-label); position:absolute; bottom:5px; left:6px; font-family:var(--mono); font-size:8.5px; text-transform:uppercase; color:#241D52; background:rgba(255,255,255,.8); border-radius:6px; padding:2px 6px;}
+  .ba-item .cap{ font-size:12.5px; font-weight:600; margin-top:8px;}
+  .quote-strip{ background:#EEF4E5; padding:22px 34px; font-size:13px; font-style:italic; color:#5C5D80; border-top:1px solid #EFEFEF;}
+
+  /* Mockup 6: Internal dashboard */
+  .mk-dash{ display:flex; min-height:420px; }
+  .mk-dash .sidebar{ width:150px; background:#241D52; color:#C9CEE8; padding:20px 0; flex-shrink:0;}
+  .mk-dash .sidebar .item{ padding:10px 20px; font-size:12.5px; font-family:var(--mono);}
+  .mk-dash .sidebar .item.active{ background:#332B66; color:#B8D19E; border-radius:0 var(--r-pill) var(--r-pill) 0; }
+  .mk-dash .main{ flex:1; padding:26px; background:#F7F8F1;}
+  .mk-dash .lock-line{ font-family:var(--mono); font-size:10.5px; color:#4B6146; margin-bottom:16px; text-transform:uppercase;}
+  .stat-row{ display:flex; gap:14px; margin-bottom:20px;}
+  .stat-card{ flex:1; background:#fff; border:1px solid #EFEFEF; border-radius:var(--r-md); padding:16px;}
+  .stat-card .num{ font-size:26px; font-weight:800;}
+  .stat-card .lbl{ font-size:11px; color:#7B7A9C; text-transform:uppercase; font-family:var(--mono); margin-top:4px;}
+  .sched-table{ width:100%; border-collapse:separate; border-spacing:0; background:#fff; border:1px solid #EFEFEF; border-radius:var(--r-md); overflow:hidden; font-size:12.5px;}
+  .sched-table th, .sched-table td{ padding:10px 14px; border-bottom:1px solid #F1F1F1; text-align:left;}
+  .sched-table th{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:#7B7A9C;}
+
+  /* ---------- PROCESS ---------- */
+  .process{ background:var(--indigo); color:var(--mint); padding:80px 0; border-radius:40px 40px 0 0; margin-top:20px;}
+  .process h2{ font-family:var(--display); font-weight:600; font-size:clamp(26px,3.6vw,38px); margin-bottom:44px; }
+  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid rgba(228,241,216,0.18); }
+  .step{ padding:26px 22px 0; border-right:1px solid rgba(228,241,216,0.18); }
+  .step:last-child{ border-right:none; }
+  .step-num{ font-family:var(--mono); color:var(--sage); font-size:13px; margin-bottom:10px; display:block; }
+  .step-title{ font-family:var(--display); font-weight:600; font-size:19px; margin-bottom:8px; }
+  .step p{ font-size:13.5px; color:#B7B6D6; }
+  @media (max-width:820px){ .steps{ grid-template-columns:1fr 1fr; } .step{ border-right:1px solid rgba(228,241,216,0.18); margin-bottom:26px; } .step:nth-child(2n){ border-right:none; } }
+
+  /* ---------- CTA ---------- */
+  .cta{ padding:90px 0; text-align:center; }
+  .cta h2{ font-family:var(--display); font-weight:600; font-size:clamp(32px,5vw,54px); max-width:20ch; margin:0 auto 22px; }
+  .cta p{ color:var(--ink-soft); font-size:16px; margin-bottom:34px; }
+  .cta .btn-primary{ font-size:14px; padding:17px 32px; }
+
+  footer{ border-top:1px solid var(--line); padding:28px 0; font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; }
+  .footer-inner{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+  @media (max-width:640px){
+    .mk-sv-hero{ flex-direction:column; }
+    .quote-card{ width:100%; }
+    .mk-lp .products, .grid-products, .ba-grid, .mk-sv-services{ grid-template-columns:repeat(2,1fr) !important; }
+    .times{ grid-template-columns:repeat(3,1fr); }
+    .mk-dash{ flex-direction:column; }
+    .mk-dash .sidebar{ width:100%; display:flex; padding:0;}
+    .mk-dash .sidebar .item{ padding:12px 14px;}
+    .mk-dash .sidebar .item.active{ border-radius:var(--r-sm); }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="brand-mark"></span>Storefront Catalog</div>
+    <nav class="nav-links">
+      <a href="#catalog">The Catalog</a>
+      <a href="#process">How It Works</a>
+      <a href="#cta">Get Yours</a>
+    </nav>
+    <a href="#cta" class="nav-cta">Start a Build</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow">Six ways to open your doors online</div>
+      <h1 class="hero-title">Every business needs a <em>storefront.</em></h1>
+      <p class="hero-sub">A phone number and a Facebook page tell people you exist. A website tells them you're worth calling. Click any listing below to open a live preview — see it before you buy it.</p>
+      <div class="hero-actions">
+        <a href="#catalog" class="btn-primary">Browse the catalog ↓</a>
+        <a href="#cta" class="btn-secondary">Get a quote</a>
+      </div>
+    </div>
+    <div class="sign-wrap">
+      <div class="sign-chain"></div>
+      <div class="sign" id="signToggle" role="button" tabindex="0" aria-label="Toggle open sign">
+        <span class="sign-face closed">CLOSED</span>
+        <span class="sign-face open">OPEN</span>
+      </div>
+      <span class="sign-hint">click to flip the sign</span>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap strip-inner">
+    <span><strong>73%</strong> of shoppers check a business's website before ever calling</span>
+    <span><strong>0</strong> of your competitors' customers can find you on Facebook alone</span>
+    <span><strong>1</strong> good site works the counter 24/7, even when you're closed</span>
+  </div>
+</div>
+
+<section class="cat-intro wrap" id="catalog">
+  <h2>Click a listing. See the site.</h2>
+  <p>No descriptions here — just open the preview. Each one is a working mockup of the real thing, built around businesses like yours.</p>
+</section>
+
+<div class="catalog wrap">
+
+  <button class="shelf" data-modal="m-lp">
+    <span class="shelf-num">Aisle 01 / SKU-LP</span>
+    <div class="shelf-title">Landing Page</div>
+    <div class="shelf-line">One page, one offer, one button.</div>
+    <div class="shelf-tags"><span class="chip">Promos</span><span class="chip">Flash sales</span></div>
+    <ul class="shelf-points">
+      <li>One goal per page — no nav to get lost in</li>
+      <li>Built for ads, flyers, or a QR code on a sign</li>
+      <li>Swap the offer without rebuilding the site</li>
+    </ul>
+    <span class="shelf-btn">Open Preview →</span>
+  </button>
+
+  <button class="shelf" data-modal="m-sv">
+    <span class="shelf-num">Aisle 02 / SKU-SV</span>
+    <div class="shelf-title">Service &amp; Lead-Capture</div>
+    <div class="shelf-line">Gets the quote request before the next shop does.</div>
+    <div class="shelf-tags"><span class="chip">Contractors</span><span class="chip">Repair shops</span></div>
+    <ul class="shelf-points">
+      <li>Quote form routes straight to your phone or inbox</li>
+      <li>Shows up when someone searches "near me"</li>
+      <li>Past-job photos and reviews build trust fast</li>
+    </ul>
+    <span class="shelf-btn">Open Preview →</span>
+  </button>
+
+  <button class="shelf" data-modal="m-ec">
+    <span class="shelf-num">Aisle 03 / SKU-EC</span>
+    <div class="shelf-title">Online Catalog</div>
+    <div class="shelf-line">Your inventory, browsable, open 24/7.</div>
+    <div class="shelf-tags"><span class="chip">Retail</span><span class="chip">Resale</span></div>
+    <ul class="shelf-points">
+      <li>Live "in stock" status stops wasted trips</li>
+      <li>Updates faster than a social media feed</li>
+      <li>Optional cart, or simple "reserve and pick up"</li>
+    </ul>
+    <span class="shelf-btn">Open Preview →</span>
+  </button>
+
+  <button class="shelf" data-modal="m-bk">
+    <span class="shelf-num">Aisle 04 / SKU-BK</span>
+    <div class="shelf-title">Booking &amp; Appointments</div>
+    <div class="shelf-line">Fills the chair without a phone tag chain.</div>
+    <div class="shelf-tags"><span class="chip">Salons</span><span class="chip">Barbershops</span></div>
+    <ul class="shelf-points">
+      <li>Live calendar — no phone tag to lock in a time</li>
+      <li>Deposits or card-on-file cut no-shows</li>
+      <li>Automatic reminder texts before the visit</li>
+    </ul>
+    <span class="shelf-btn">Open Preview →</span>
+  </button>
+
+  <button class="shelf" data-modal="m-pf">
+    <span class="shelf-num">Aisle 05 / SKU-PF</span>
+    <div class="shelf-title">Portfolio / Proof of Work</div>
+    <div class="shelf-line">The last job you finished, doing the selling.</div>
+    <div class="shelf-tags"><span class="chip">Renovation</span><span class="chip">Design &amp; build</span></div>
+    <ul class="shelf-points">
+      <li>Before/after proof beats any sales pitch</li>
+      <li>Testimonials tied to specific finished jobs</li>
+      <li>Doubles as a quote-request funnel</li>
+    </ul>
+    <span class="shelf-btn">Open Preview →</span>
+  </button>
+
+  <button class="shelf" data-modal="m-in">
+    <span class="shelf-num">Aisle 06 / SKU-IN</span>
+    <div class="shelf-title">Internal / Back-of-House</div>
+    <div class="shelf-line">Not for customers — for you and your crew.</div>
+    <div class="shelf-tags"><span class="chip">Staff-only</span><span class="chip">Ops tools</span></div>
+    <ul class="shelf-points">
+      <li>Locked behind a login — invisible to customers</li>
+      <li>Replaces sticky notes and group-text scheduling</li>
+      <li>The payoff is hours saved, not a sale</li>
+    </ul>
+    <span class="shelf-btn">Open Preview →</span>
+  </button>
+
+</div>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <h2>How a build actually happens</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">Step 1</span>
+        <div class="step-title">Walk the shop</div>
+        <p>We look at how you actually take orders, bookings, or calls today — the site fits your business, not a template.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">Step 2</span>
+        <div class="step-title">Pick the aisle</div>
+        <p>Match your business to one (or two) of the six types above. Most shops don't need everything — just the right thing.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">Step 3</span>
+        <div class="step-title">Build &amp; review</div>
+        <p>You see working pages early, not a finished surprise at the end. Changes happen before launch, not after.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">Step 4</span>
+        <div class="step-title">Flip the sign</div>
+        <p>Site goes live, connected to your phone, email, or booking calendar — open for business, around the clock.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta wrap" id="cta">
+  <h2>Know which aisle your business belongs in?</h2>
+  <p>Tell us what you sell and how people find you now — we'll tell you exactly which kind of site pays for itself fastest.</p>
+  <a href="#" class="btn-primary">Request a Free Walkthrough</a>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>Storefront Catalog — Websites Built to Sell</span>
+    <span>Six aisles. One goal: turn the sign to open.</span>
+  </div>
+</footer>
+
+<!-- ===== MODAL OVERLAY ===== -->
+<div class="overlay" id="overlay">
+  <div class="browser" role="dialog" aria-modal="true" aria-label="Website preview">
+    <div class="browser-chrome">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="url-bar"><span class="lock">🔒</span><span id="urlText">example.com</span></div>
+      <button class="close-btn" id="closeBtn" aria-label="Close preview">✕</button>
+    </div>
+    <div class="browser-body" id="browserBody"></div>
+  </div>
+</div>
+
+<script>
+  /* ---------- Image helper ----------
+     Usage inside mockup template strings: img('accent-chair.jpg', 'Accent chair')
+     Put matching files in an /images folder next to this HTML file, e.g.:
+       images/accent-chair.jpg
+       images/coffee-table.jpg
+     Missing files fall back to a soft placeholder automatically. */
+  function img(file, alt, extraClass){
+    const cls = 'mk-img' + (extraClass ? ' ' + extraClass : '');
+    return `<img class="${cls}" src="images/${file}" alt="${alt}"
+      onerror="this.outerHTML='<div class=&quot;mk-img-placeholder ${extraClass||''}&quot;>${alt}<br><span style=&quot;opacity:.6&quot;>(add images/${file})</span></div>'">`;
+  }
+
+  /* ---------- Sign toggle ---------- */
+  const sign = document.getElementById('signToggle');
+  function toggleSign(){ sign.classList.toggle('is-open'); }
+  sign.addEventListener('click', toggleSign);
+  sign.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleSign(); }});
+  window.addEventListener('load', ()=> setTimeout(()=> sign.classList.add('is-open'), 900));
+
+  /* ---------- Scroll reveal ---------- */
+  const shelves = document.querySelectorAll('.shelf');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){ entry.target.classList.add('in-view'); obs.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12 });
+  shelves.forEach(t=> obs.observe(t));
+
+  /* ---------- Mockup content ---------- */
+  const mockups = {
+    'm-lp': {
+      url: 'treasuresdepotbrookfield.com/flash-sale',
+      html: `
+        <div class="mk mk-lp">
+          <div class="mk-eyebrow">3 Days Only</div>
+          <h3>Warehouse Blowout —<br>Everything Half Off</h3>
+          <p>Overstock from Wayfair, Home Depot &amp; Target, priced to move this weekend only.</p>
+          <div class="countdown">
+            <div>01<span>Days</span></div>
+            <div>14<span>Hrs</span></div>
+            <div>32<span>Min</span></div>
+          </div>
+          <a class="mk-btn" href="#">Shop The Sale →</a>
+          <div class="products">
+            <div class="p"><div class="ph">${img('accent-chair.jpg','Accent chair')}</div>Accent Chair<br><b>$45</b></div>
+            <div class="p"><div class="ph">${img('floor-lamp.jpg','Floor lamp')}</div>Floor Lamp<br><b>$18</b></div>
+            <div class="p"><div class="ph">${img('wall-mirror.jpg','Wall mirror')}</div>Wall Mirror<br><b>$22</b></div>
+            <div class="p"><div class="ph">${img('rug-5x7.jpg','5 by 7 rug')}</div>Rug 5x7<br><b>$30</b></div>
+          </div>
+        </div>`
+    },
+    'm-sv': {
+      url: 'busseproperty.com',
+      html: `
+        <div class="mk">
+          <div class="mk-sv-nav">
+            <div class="logo">Busse Property Solutions</div>
+            <div class="links"><span>Services</span><span>About</span><span>Reviews</span><span>Contact</span></div>
+          </div>
+          <div class="mk-sv-hero">
+            <div class="col">
+              <h3>Same-Day Repairs.<br>No Surprise Bills.</h3>
+              <p>HVAC, handyman &amp; emergency property fixes across Brookfield — call or request a quote in under a minute.</p>
+              <a class="mk-btn" href="#">Get a Free Quote →</a>
+              <div class="badges"><span>★ 5.0 rating</span><span>24/7 emergency line</span></div>
+            </div>
+            <div class="quote-card">
+              <h4>Request a Quote</h4>
+              <input placeholder="Your name">
+              <input placeholder="Phone number">
+              <textarea rows="2" placeholder="What needs fixing?"></textarea>
+              <button class="mk-btn">Send Request</button>
+            </div>
+          </div>
+          <div class="mk-sv-services">
+            <div class="svc"><div class="ic"></div><h5>HVAC Repair</h5><p>Heating &amp; cooling fixes, same-day available.</p></div>
+            <div class="svc"><div class="ic"></div><h5>General Handyman</h5><p>Small jobs, fast turnarounds, fair pricing.</p></div>
+            <div class="svc"><div class="ic"></div><h5>Emergency Calls</h5><p>Something broke tonight? We still pick up.</p></div>
+          </div>
+        </div>`
+    },
+    'm-ec': {
+      url: 'treasuresdepotbrookfield.com/shop',
+      html: `
+        <div class="mk">
+          <div class="mk-ec-top"><div class="logo">Treasures Depot</div><div style="font-size:12px;color:#7B7A9C;">🛒 Cart (0)</div></div>
+          <div class="filters">
+            <span class="active">All</span><span>Furniture</span><span>Home Decor</span><span>Electronics</span><span>Kids</span>
+          </div>
+          <div class="grid-products">
+            <div class="pcard"><div class="img">${img('overstock-sofa.jpg','Overstock sofa')}</div><div class="info"><div class="name">Overstock Sofa</div><div class="price">$220</div><div class="stock">✓ In Stock</div></div></div>
+            <div class="pcard"><div class="img">${img('coffee-table.jpg','Coffee table')}</div><div class="info"><div class="name">Coffee Table</div><div class="price">$65</div><div class="stock">✓ In Stock</div></div></div>
+            <div class="pcard"><div class="img">${img('desk-lamp-set.jpg','Desk lamp set')}</div><div class="info"><div class="name">Desk Lamp Set</div><div class="price">$28</div><div class="stock">✓ In Stock</div></div></div>
+            <div class="pcard"><div class="img">${img('bookshelf.jpg','Bookshelf')}</div><div class="info"><div class="name">Bookshelf</div><div class="price">$54</div><div class="stock" style="color:#B26A5C;">1 Left</div></div></div>
+            <div class="pcard"><div class="img">${img('wall-art-set.jpg','Wall art set')}</div><div class="info"><div class="name">Wall Art Set</div><div class="price">$19</div><div class="stock">✓ In Stock</div></div></div>
+            <div class="pcard"><div class="img">${img('kids-play-table.jpg','Kids play table')}</div><div class="info"><div class="name">Kids Play Table</div><div class="price">$40</div><div class="stock">✓ In Stock</div></div></div>
+            <div class="pcard"><div class="img">${img('area-rug.jpg','Area rug')}</div><div class="info"><div class="name">Area Rug</div><div class="price">$35</div><div class="stock">✓ In Stock</div></div></div>
+            <div class="pcard"><div class="img">${img('storage-bins.jpg','Storage bins, set of 4')}</div><div class="info"><div class="name">Storage Bins (4)</div><div class="price">$16</div><div class="stock">✓ In Stock</div></div></div>
+          </div>
+        </div>`
+    },
+    'm-bk': {
+      url: 'superiorbarbershop.com/book',
+      html: `
+        <div class="mk">
+          <div class="mk-bk-hero"><h3>Book Your Cut</h3><p>Superior Barbershop — 8909 Burlington Ave, Brookfield</p></div>
+          <div class="svc-menu">
+            <div class="item sel">Haircut — $25</div>
+            <div class="item">Beard Trim — $15</div>
+            <div class="item">Cut + Beard — $35</div>
+            <div class="item">Kids Cut — $18</div>
+          </div>
+          <div class="barbers">
+            <div class="av"><div class="circ">${img('barber-anthony.jpg','Anthony','mk-img-round')}</div>Anthony</div>
+            <div class="av"><div class="circ">${img('barber-ariel.jpg','Ariel','mk-img-round')}</div>Ariel</div>
+            <div class="av"><div class="circ">${img('barber-chris.jpg','Chris','mk-img-round')}</div>Chris</div>
+          </div>
+          <div class="times">
+            <div>10:00</div><div class="sel">10:30</div><div>11:00</div><div>1:30</div><div>2:00</div>
+          </div>
+          <div class="book-footer">
+            <span style="font-size:12.5px;color:#7B7A9C;">Sat, Aug 22 · Anthony · Haircut</span>
+            <a class="mk-btn" href="#">Confirm Booking →</a>
+          </div>
+        </div>`
+    },
+    'm-pf': {
+      url: 'fixbuddyhandyman.com/work',
+      html: `
+        <div class="mk">
+          <div class="mk-pf-hero"><h3>Recent Work</h3><p>Every project below was finished on-time, on-budget, by the same crew that'll show up at your door.</p></div>
+          <div class="ba-grid">
+            <div class="ba-item"><div class="pair"><div data-label="Before">${img('kitchen-before.jpg','Kitchen before')}</div><div data-label="After">${img('kitchen-after.jpg','Kitchen after')}</div></div><div class="cap">Kitchen Refresh — Brookfield Ave</div></div>
+            <div class="ba-item"><div class="pair"><div data-label="Before">${img('apartment-before.jpg','Apartment before')}</div><div data-label="After">${img('apartment-after.jpg','Apartment after')}</div></div><div class="cap">Apartment Turnover — 47th St</div></div>
+            <div class="ba-item"><div class="pair"><div data-label="Before">${img('bathroom-before.jpg','Bathroom before')}</div><div data-label="After">${img('bathroom-after.jpg','Bathroom after')}</div></div><div class="cap">Bathroom Remodel — Grand Blvd</div></div>
+          </div>
+          <div class="quote-strip">"Highly recommending this guys. They did some renovations in my apartment. They have provided quality work and very polite people." — verified customer</div>
+        </div>`
+    },
+    'm-in': {
+      url: 'app.yourbusiness.com/dashboard',
+      html: `
+        <div class="mk mk-dash">
+          <div class="sidebar">
+            <div class="item active">Overview</div>
+            <div class="item">Inventory</div>
+            <div class="item">Schedule</div>
+            <div class="item">Messages</div>
+            <div class="item">Reports</div>
+          </div>
+          <div class="main">
+            <div class="lock-line">🔒 Staff Login Only — Not Public</div>
+            <div class="stat-row">
+              <div class="stat-card"><div class="num">6</div><div class="lbl">Today's Bookings</div></div>
+              <div class="stat-card"><div class="num">3</div><div class="lbl">Low Stock Items</div></div>
+              <div class="stat-card"><div class="num">2</div><div class="lbl">Open Tickets</div></div>
+            </div>
+            <table class="sched-table">
+              <tr><th>Time</th><th>Staff</th><th>Job</th><th>Status</th></tr>
+              <tr><td>9:00 AM</td><td>Angelo</td><td>Oil Change — Bay 2</td><td>In Progress</td></tr>
+              <tr><td>10:30 AM</td><td>Rick</td><td>Brake Inspection</td><td>Scheduled</td></tr>
+              <tr><td>1:00 PM</td><td>Lisa</td><td>Front Desk</td><td>—</td></tr>
+            </table>
+          </div>
+        </div>`
+    }
+  };
+
+  const overlay = document.getElementById('overlay');
+  const browserBody = document.getElementById('browserBody');
+  const urlText = document.getElementById('urlText');
+  let lastFocused = null;
+
+  function openModal(key){
+    const data = mockups[key];
+    if(!data) return;
+    urlText.textContent = data.url;
+    browserBody.innerHTML = data.html;
+    lastFocused = document.activeElement;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('closeBtn').focus();
+  }
+  function closeModal(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    if(lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.shelf').forEach(btn=>{
+    btn.addEventListener('click', ()=> openModal(btn.getAttribute('data-modal')));
+  });
+  document.getElementById('closeBtn').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.classList.contains('open')) closeModal(); });
+</script>
+
+</body>
+</html>
