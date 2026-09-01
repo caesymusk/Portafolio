@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Webinator — Websites Built to Sell</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* ===== CUSTOM LOCAL FONTS =====
      Drop matching files in a /fonts folder next to this HTML file and they'll
@@ -125,9 +125,11 @@
   .btn-secondary{ background:transparent; border:1px solid var(--ink-soft); color:var(--ink); }
   .btn-secondary:hover{ background:var(--paper-card); }
 
-  /* Sign hangs directly off the nav bar, pinned to it, so it scrolls with the header */
+  /* Sign hangs from the bottom of the nav visually, but lives in the
+     (non-sticky) hero section so it scrolls away with the page instead
+     of staying pinned to the header. */
   .sign-wrap{
-    position:absolute; top:100%; right:32px; z-index:1;
+    position:absolute; top:0; right:32px; z-index:1;
     display:flex; flex-direction:column; align-items:center; gap:0; perspective:1100px;
   }
   .sign-mount{ width:34px; height:10px; background:var(--ink-soft); border-radius:0 0 6px 6px; opacity:.55; }
@@ -400,6 +402,37 @@
   .sched-table th, .sched-table td{ padding:10px 14px; border-bottom:1px solid #F1F1F1; text-align:left;}
   .sched-table th{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:#7B7A9C;}
 
+  /* ---------- CUSTOMIZE ("Make It Yours") ---------- */
+  .customize{ padding:86px 0 70px; }
+  .customize-head h2{ font-family:var(--display); font-weight:600; font-size:clamp(28px,3.6vw,40px); max-width:20ch; }
+  .customize-head p{ margin-top:16px; max-width:62ch; color:var(--ink-soft); font-size:16px; }
+  .customize-controls{ margin-top:40px; display:flex; flex-direction:column; gap:30px; }
+  .control-label{ display:block; font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:14px; }
+  .swatch-row{ display:flex; flex-wrap:wrap; gap:12px; }
+  .swatch-btn{
+    display:flex; align-items:center; gap:10px;
+    background:var(--paper-card); border:1.5px solid transparent; border-radius:var(--r-pill);
+    padding:9px 18px 9px 10px; cursor:pointer; font-family:var(--body); font-size:14px; color:var(--ink);
+    transition:border-color .2s, transform .15s;
+  }
+  .swatch-btn:hover{ transform:translateY(-1px); }
+  .swatch-btn.active{ border-color:var(--sage-deep); }
+  .swatch-dots{ display:flex; }
+  .swatch-dots i{ display:block; width:16px; height:16px; border-radius:50%; margin-left:-6px; box-shadow:0 0 0 2px var(--paper-card); }
+  .swatch-dots i:first-child{ margin-left:0; }
+  .font-row{ display:flex; flex-wrap:wrap; gap:12px; }
+  .font-btn{
+    background:var(--paper-card); border:1.5px solid transparent; border-radius:var(--r-md);
+    padding:16px 20px; cursor:pointer; text-align:left; min-width:170px;
+    transition:border-color .2s, transform .15s;
+  }
+  .font-btn:hover{ transform:translateY(-1px); }
+  .font-btn.active{ border-color:var(--sage-deep); }
+  .font-btn .font-sample{ display:block; font-size:22px; margin-bottom:6px; }
+  .font-btn .font-label{ display:block; font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); }
+  .customize-note{ margin-top:30px; font-size:13.5px; color:var(--ink-soft); max-width:60ch; }
+  @media (max-width:640px){ .font-btn{ min-width:140px; flex:1 1 45%; } }
+
   /* ---------- PROCESS ---------- */
   .process{ background:var(--indigo); color:var(--mint); padding:80px 0; border-radius:40px 40px 0 0; margin-top:20px;}
   .process h2{ font-family:var(--display); font-weight:600; font-size:clamp(26px,3.6vw,38px); margin-bottom:44px; }
@@ -439,25 +472,26 @@
     <div class="brand"><span class="brand-mark"></span>Webinator</div>
     <nav class="nav-links">
       <a href="#catalog">The Catalog</a>
+      <a href="#customize">Make It Yours</a>
       <a href="#process">How It Works</a>
       <a href="#cta">Get Yours</a>
     </nav>
     <a href="#cta" class="nav-cta">Start a Build</a>
-    <div class="sign-wrap">
-      <div class="sign-mount"></div>
-      <div class="sign-chain"></div>
-      <div class="sign-swing">
-        <div class="sign" id="signToggle" role="button" tabindex="0" aria-label="Toggle open sign">
-          <span class="sign-face closed">CLOSED</span>
-          <span class="sign-face open">OPEN</span>
-        </div>
-      </div>
-      <span class="sign-hint">click to flip the sign</span>
-    </div>
   </div>
 </header>
 
 <section class="hero">
+  <div class="sign-wrap">
+    <div class="sign-mount"></div>
+    <div class="sign-chain"></div>
+    <div class="sign-swing">
+      <div class="sign" id="signToggle" role="button" tabindex="0" aria-label="Toggle open sign">
+        <span class="sign-face closed">CLOSED</span>
+        <span class="sign-face open">OPEN</span>
+      </div>
+    </div>
+    <span class="sign-hint">click to flip the sign</span>
+  </div>
   <div class="wrap hero-inner">
     <div>
       <div class="eyebrow">Six ways to open your doors online</div>
@@ -566,6 +600,61 @@
 
 </div>
 
+<section class="customize wrap" id="customize">
+  <div class="customize-head">
+    <h2>Make It Yours</h2>
+    <p>Every build ships in your brand — not ours. Try a few combinations right here and watch the whole page shift color and type in real time.</p>
+  </div>
+
+  <div class="customize-controls">
+    <div class="control-group">
+      <span class="control-label">Color Palette</span>
+      <div class="swatch-row">
+        <button class="swatch-btn active" data-palette="meadow">
+          <span class="swatch-dots"><i style="background:#241D52"></i><i style="background:#A9C49E"></i><i style="background:#E4F1D8"></i></span>
+          Meadow
+        </button>
+        <button class="swatch-btn" data-palette="terracotta">
+          <span class="swatch-dots"><i style="background:#3D2B1F"></i><i style="background:#B5713F"></i><i style="background:#F6ECD9"></i></span>
+          Warm Terracotta
+        </button>
+        <button class="swatch-btn" data-palette="coastal">
+          <span class="swatch-dots"><i style="background:#0F2438"></i><i style="background:#2E8B8B"></i><i style="background:#EAF4F3"></i></span>
+          Coastal Navy
+        </button>
+        <button class="swatch-btn" data-palette="blush">
+          <span class="swatch-dots"><i style="background:#2B1F26"></i><i style="background:#D97A96"></i><i style="background:#FBEAEF"></i></span>
+          Modern Blush
+        </button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <span class="control-label">Typeface</span>
+      <div class="font-row">
+        <button class="font-btn active" data-font="boutique">
+          <span class="font-sample" style="font-family:'Fraunces',serif;">Aa</span>
+          <span class="font-label">Boutique Serif</span>
+        </button>
+        <button class="font-btn" data-font="editorial">
+          <span class="font-sample" style="font-family:'Playfair Display',serif;">Aa</span>
+          <span class="font-label">Classic Editorial</span>
+        </button>
+        <button class="font-btn" data-font="friendly">
+          <span class="font-sample" style="font-family:'Poppins',sans-serif;">Aa</span>
+          <span class="font-label">Friendly Rounded</span>
+        </button>
+        <button class="font-btn" data-font="techbold">
+          <span class="font-sample" style="font-family:'Space Grotesk',sans-serif;">Aa</span>
+          <span class="font-label">Bold &amp; Modern</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p class="customize-note">This is exactly what a client walkthrough looks like — you pick the direction, we lock it in before writing a line of the real build.</p>
+</section>
+
 <section class="process" id="process">
   <div class="wrap">
     <h2>How a build actually happens</h2>
@@ -631,6 +720,69 @@
     return `<img class="${cls}" src="images/${file}" alt="${alt}"
       onerror="this.outerHTML='<div class=&quot;mk-img-placeholder ${extraClass||''}&quot;>${alt}<br><span style=&quot;opacity:.6&quot;>(add images/${file})</span></div>'">`;
   }
+
+  /* ---------- Make It Yours: palette + font switcher ---------- */
+  const PALETTES = {
+    meadow: {
+      '--mint':'#E4F1D8','--mint-deep':'#CDE6BC','--sage':'#A9C49E','--sage-deep':'#7FA073',
+      '--slate':'#7C8C90','--slate-blue':'#5C5D80','--indigo':'#241D52','--indigo-deep':'#1A1540',
+      '--paper':'#F1F6EA','--paper-card':'#DCEACE','--ink-soft':'#5C5D80',
+      '--line':'rgba(36,29,82,0.14)','--line-soft':'rgba(36,29,82,0.08)'
+    },
+    terracotta: {
+      '--mint':'#F6ECD9','--mint-deep':'#EDDCBB','--sage':'#C98A5D','--sage-deep':'#B5713F',
+      '--slate':'#8B6F5C','--slate-blue':'#6B4B36','--indigo':'#3D2B1F','--indigo-deep':'#2A1D15',
+      '--paper':'#F4E9D8','--paper-card':'#EADFC9','--ink-soft':'#6B4B36',
+      '--line':'rgba(61,43,31,0.16)','--line-soft':'rgba(61,43,31,0.09)'
+    },
+    coastal: {
+      '--mint':'#EAF4F3','--mint-deep':'#D3E9E7','--sage':'#2E8B8B','--sage-deep':'#1F6E6E',
+      '--slate':'#5C7A8A','--slate-blue':'#2D4A63','--indigo':'#0F2438','--indigo-deep':'#081726',
+      '--paper':'#F3F8F7','--paper-card':'#E1EEEC','--ink-soft':'#2D4A63',
+      '--line':'rgba(15,36,56,0.14)','--line-soft':'rgba(15,36,56,0.08)'
+    },
+    blush: {
+      '--mint':'#FBEAEF','--mint-deep':'#F5D6E0','--sage':'#D97A96','--sage-deep':'#B85575',
+      '--slate':'#8C7A85','--slate-blue':'#5C4650','--indigo':'#2B1F26','--indigo-deep':'#1B1218',
+      '--paper':'#FBF3F2','--paper-card':'#F3E1E2','--ink-soft':'#5C4650',
+      '--line':'rgba(43,31,38,0.14)','--line-soft':'rgba(43,31,38,0.08)'
+    }
+  };
+
+  const FONTS = {
+    boutique:  { display:"'CustomDisplay','Fraunces',serif",       body:"'CustomBody','Inter',sans-serif",         mono:"'CustomMono','IBM Plex Mono',monospace" },
+    editorial: { display:"'CustomDisplay','Playfair Display',serif", body:"'CustomBody','Source Sans 3',sans-serif", mono:"'CustomMono','IBM Plex Mono',monospace" },
+    friendly:  { display:"'CustomDisplay','Poppins',sans-serif",   body:"'CustomBody','Poppins',sans-serif",       mono:"'CustomMono','Space Mono',monospace" },
+    techbold:  { display:"'CustomDisplay','Space Grotesk',sans-serif", body:"'CustomBody','Space Grotesk',sans-serif", mono:"'CustomMono','Space Mono',monospace" }
+  };
+
+  function applyPalette(key){
+    const vars = PALETTES[key];
+    if(!vars) return;
+    Object.entries(vars).forEach(([k,v]) => document.documentElement.style.setProperty(k, v));
+  }
+  function applyFont(key){
+    const f = FONTS[key];
+    if(!f) return;
+    document.documentElement.style.setProperty('--display', f.display);
+    document.documentElement.style.setProperty('--body', f.body);
+    document.documentElement.style.setProperty('--mono', f.mono);
+  }
+
+  document.querySelectorAll('.swatch-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.swatch-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      applyPalette(btn.dataset.palette);
+    });
+  });
+  document.querySelectorAll('.font-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.font-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFont(btn.dataset.font);
+    });
+  });
 
   /* ---------- Sign toggle ---------- */
   const sign = document.getElementById('signToggle');
