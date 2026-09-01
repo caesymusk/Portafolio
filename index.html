@@ -3,10 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storefront Catalog — Websites Built to Sell</title>
+<title>Webinator — Websites Built to Sell</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* ===== CUSTOM LOCAL FONTS =====
+     Drop matching files in a /fonts folder next to this HTML file and they'll
+     be used automatically. Name them exactly as below (any of these formats
+     works — you only need one per slot). If a file is missing, the browser
+     silently skips it and falls back to the web font already loaded above. */
+  @font-face{
+    font-family:'CustomDisplay';
+    src: url('fonts/display.woff2') format('woff2'),
+         url('fonts/display.woff') format('woff'),
+         url('fonts/display.ttf') format('truetype'),
+         url('fonts/display.otf') format('opentype');
+    font-weight: 400 800;
+    font-display: swap;
+  }
+  @font-face{
+    font-family:'CustomBody';
+    src: url('fonts/body.woff2') format('woff2'),
+         url('fonts/body.woff') format('woff'),
+         url('fonts/body.ttf') format('truetype'),
+         url('fonts/body.otf') format('opentype');
+    font-weight: 400 800;
+    font-display: swap;
+  }
+  @font-face{
+    font-family:'CustomMono';
+    src: url('fonts/mono.woff2') format('woff2'),
+         url('fonts/mono.woff') format('woff'),
+         url('fonts/mono.ttf') format('truetype'),
+         url('fonts/mono.otf') format('opentype');
+    font-weight: 400 700;
+    font-display: swap;
+  }
+
   :root{
     /* soft mint → sage → slate → indigo palette */
     --mint:#E4F1D8;
@@ -25,9 +58,9 @@
     --line: rgba(36,29,82,0.14);
     --line-soft: rgba(36,29,82,0.08);
 
-    --display: 'Fraunces', serif;
-    --body: 'Inter', sans-serif;
-    --mono: 'IBM Plex Mono', monospace;
+    --display: 'CustomDisplay', 'Fraunces', serif;
+    --body: 'CustomBody', 'Inter', sans-serif;
+    --mono: 'CustomMono', 'IBM Plex Mono', monospace;
 
     --r-sm:10px;
     --r-md:16px;
@@ -92,22 +125,39 @@
   .btn-secondary{ background:transparent; border:1px solid var(--ink-soft); color:var(--ink); }
   .btn-secondary:hover{ background:var(--paper-card); }
 
-  .sign-wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; }
-  .sign-chain{ width:2px; height:26px; background:repeating-linear-gradient(180deg, var(--ink-soft) 0 4px, transparent 4px 8px); }
+  .sign-wrap{ display:flex; flex-direction:column; align-items:center; gap:0; perspective:900px; }
+  .sign-chain{ width:2px; height:26px; background:repeating-linear-gradient(180deg, var(--ink-soft) 0 4px, transparent 4px 8px);
+    transform-origin:top center; animation:chainSway 3.2s ease-in-out infinite; }
   .sign{
-    width:172px; height:172px; border-radius:var(--r-lg);
-    background:linear-gradient(160deg, var(--slate-blue), var(--indigo));
-    display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer;
-    box-shadow:0 16px 34px rgba(36,29,82,0.28);
-    transition:box-shadow .35s ease, background .35s ease;
+    width:172px; height:172px; margin-top:2px;
+    cursor:pointer; position:relative;
+    transform-style:preserve-3d;
+    transition:transform .7s cubic-bezier(.34,1.56,.64,1);
+    animation:signSway 3.2s ease-in-out infinite;
+    transform-origin:top center;
   }
-  .sign-face{ font-family:var(--display); font-weight:600; font-size:26px; letter-spacing:1px; transition:opacity .35s ease; }
-  .sign-face.closed{ color:rgba(228,241,216,0.55); }
-  .sign-face.open{ color:var(--mint); position:absolute; opacity:0; }
-  .sign.is-open .sign-face.closed{ opacity:0; }
-  .sign.is-open .sign-face.open{ opacity:1; }
-  .sign.is-open{ background:linear-gradient(160deg, var(--sage-deep), #4B6146); box-shadow:0 0 0 6px rgba(169,196,158,0.25), 0 16px 34px rgba(79,107,70,0.35); }
-  .sign-hint{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.06em; }
+  .sign.is-open{ transform:rotateY(180deg); }
+  .sign-face{
+    position:absolute; inset:0; border-radius:var(--r-lg);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:600; font-size:26px; letter-spacing:1px;
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    box-shadow:0 16px 34px rgba(36,29,82,0.28);
+  }
+  .sign-face.closed{
+    background:linear-gradient(160deg, var(--slate-blue), var(--indigo));
+    color:rgba(228,241,216,0.75);
+  }
+  .sign-face.open{
+    background:linear-gradient(160deg, var(--sage-deep), #4B6146);
+    color:var(--mint);
+    transform:rotateY(180deg);
+    box-shadow:0 0 0 6px rgba(169,196,158,0.25), 0 16px 34px rgba(79,107,70,0.35);
+  }
+  .sign-hint{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.06em; margin-top:14px; }
+  @keyframes signSway{ 0%,100%{ transform:rotate(-1.5deg);} 50%{ transform:rotate(1.5deg);} }
+  .sign.is-open{ animation:none; }
+  @keyframes chainSway{ 0%,100%{ transform:rotate(-1.5deg);} 50%{ transform:rotate(1.5deg);} }
   @media (max-width:900px){ .hero-inner{ grid-template-columns:1fr; } .sign-wrap{ align-items:flex-start; } }
 
   /* ---------- STRIP ---------- */
@@ -378,7 +428,7 @@
 
 <header class="nav">
   <div class="nav-inner">
-    <div class="brand"><span class="brand-mark"></span>Storefront Catalog</div>
+    <div class="brand"><span class="brand-mark"></span>Webinator</div>
     <nav class="nav-links">
       <a href="#catalog">The Catalog</a>
       <a href="#process">How It Works</a>
@@ -541,7 +591,7 @@
 
 <footer>
   <div class="wrap footer-inner">
-    <span>Storefront Catalog — Websites Built to Sell</span>
+    <span>Webinator — Websites Built to Sell</span>
     <span>Six aisles. One goal: turn the sign to open.</span>
   </div>
 </footer>
