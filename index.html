@@ -96,7 +96,7 @@
 
   /* ---------- NAV ---------- */
   header.nav{ position:sticky; top:0; z-index:50; background:rgba(241,246,234,0.9); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); }
-  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px; margin:0 auto; }
+  .nav-inner{ position:relative; display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px; margin:0 auto; }
   .brand{ font-family:var(--display); font-weight:600; font-size:22px; display:flex; align-items:center; gap:10px; }
   .brand-mark{ width:14px; height:14px; background:var(--sage-deep); border-radius:50%; display:inline-block; }
   .nav-links{ display:flex; gap:28px; font-family:var(--mono); font-size:12.5px; letter-spacing:0.03em; text-transform:uppercase; color:var(--ink-soft); }
@@ -108,7 +108,7 @@
 
   /* ---------- HERO ---------- */
   .hero{ position:relative; padding:96px 0 80px; overflow:hidden; }
-  .hero-inner{ display:grid; grid-template-columns:1.3fr 0.7fr; gap:56px; align-items:end; }
+  .hero-inner{ display:grid; grid-template-columns:1fr; gap:56px; align-items:start; }
   .eyebrow{ font-family:var(--mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--sage-deep); display:flex; align-items:center; gap:10px; margin-bottom:22px; }
   .eyebrow::before{ content:""; width:26px; height:2px; background:var(--sage-deep); border-radius:2px; }
   h1.hero-title{ font-family:var(--display); font-weight:600; font-size:clamp(42px, 6.4vw, 84px); line-height:1.02; letter-spacing:-0.01em; }
@@ -125,22 +125,26 @@
   .btn-secondary{ background:transparent; border:1px solid var(--ink-soft); color:var(--ink); }
   .btn-secondary:hover{ background:var(--paper-card); }
 
-  .sign-wrap{ display:flex; flex-direction:column; align-items:center; gap:0; perspective:900px; }
-  .sign-chain{ width:2px; height:26px; background:repeating-linear-gradient(180deg, var(--ink-soft) 0 4px, transparent 4px 8px);
+  /* Sign hangs directly off the nav bar, pinned to it, so it scrolls with the header */
+  .sign-wrap{
+    position:absolute; top:100%; right:32px; z-index:1;
+    display:flex; flex-direction:column; align-items:center; gap:0; perspective:1100px;
+  }
+  .sign-mount{ width:34px; height:10px; background:var(--ink-soft); border-radius:0 0 6px 6px; opacity:.55; }
+  .sign-chain{ width:2px; height:64px; background:repeating-linear-gradient(180deg, var(--ink-soft) 0 4px, transparent 4px 8px);
     transform-origin:top center; animation:chainSway 3.2s ease-in-out infinite; }
+  .sign-swing{ transform-origin:top center; animation:signSway 3.2s ease-in-out infinite; }
   .sign{
-    width:172px; height:172px; margin-top:2px;
+    width:236px; height:236px; margin-top:2px;
     cursor:pointer; position:relative;
     transform-style:preserve-3d;
     transition:transform .7s cubic-bezier(.34,1.56,.64,1);
-    animation:signSway 3.2s ease-in-out infinite;
-    transform-origin:top center;
   }
   .sign.is-open{ transform:rotateY(180deg); }
   .sign-face{
     position:absolute; inset:0; border-radius:var(--r-lg);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--display); font-weight:600; font-size:26px; letter-spacing:1px;
+    font-family:var(--display); font-weight:600; font-size:34px; letter-spacing:1px;
     backface-visibility:hidden; -webkit-backface-visibility:hidden;
     box-shadow:0 16px 34px rgba(36,29,82,0.28);
   }
@@ -154,11 +158,15 @@
     transform:rotateY(180deg);
     box-shadow:0 0 0 6px rgba(169,196,158,0.25), 0 16px 34px rgba(79,107,70,0.35);
   }
-  .sign-hint{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.06em; margin-top:14px; }
+  .sign-hint{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.06em; margin-top:14px; white-space:nowrap; }
   @keyframes signSway{ 0%,100%{ transform:rotate(-1.5deg);} 50%{ transform:rotate(1.5deg);} }
-  .sign.is-open{ animation:none; }
   @keyframes chainSway{ 0%,100%{ transform:rotate(-1.5deg);} 50%{ transform:rotate(1.5deg);} }
-  @media (max-width:900px){ .hero-inner{ grid-template-columns:1fr; } .sign-wrap{ align-items:flex-start; } }
+  @media (max-width:900px){
+    .sign-wrap{ right:12px; }
+    .sign{ width:150px; height:150px; }
+    .sign-face{ font-size:22px; }
+    .sign-chain{ height:40px; }
+  }
 
   /* ---------- STRIP ---------- */
   .strip{ background:var(--indigo); color:var(--mint); padding:22px 0; }
@@ -435,6 +443,17 @@
       <a href="#cta">Get Yours</a>
     </nav>
     <a href="#cta" class="nav-cta">Start a Build</a>
+    <div class="sign-wrap">
+      <div class="sign-mount"></div>
+      <div class="sign-chain"></div>
+      <div class="sign-swing">
+        <div class="sign" id="signToggle" role="button" tabindex="0" aria-label="Toggle open sign">
+          <span class="sign-face closed">CLOSED</span>
+          <span class="sign-face open">OPEN</span>
+        </div>
+      </div>
+      <span class="sign-hint">click to flip the sign</span>
+    </div>
   </div>
 </header>
 
@@ -448,14 +467,6 @@
         <a href="#catalog" class="btn-primary">Browse the catalog ↓</a>
         <a href="#cta" class="btn-secondary">Get a quote</a>
       </div>
-    </div>
-    <div class="sign-wrap">
-      <div class="sign-chain"></div>
-      <div class="sign" id="signToggle" role="button" tabindex="0" aria-label="Toggle open sign">
-        <span class="sign-face closed">CLOSED</span>
-        <span class="sign-face open">OPEN</span>
-      </div>
-      <span class="sign-hint">click to flip the sign</span>
     </div>
   </div>
 </section>
